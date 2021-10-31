@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="heading">What is the weather like today?</h1>
+
+      <!-- City Search Block -->
+      <div class="card">
+        <div class="card-body">
+          <form class="row g-2" id="search-city-form">
+            <div class="col-8">
+              <input
+                type="text"
+                class="form-control"
+                id="search-city-input"
+                list="datalist-cities"
+                placeholder="Type to search for city or choose from list..."
+                autofocus="on"
+                autocomplete="off"
+              />
+              <datalist id="datalist-cities">
+                <option value="Adelaide"></option>
+                <option value="Brisbane"></option>
+                <option value="Canberra"></option>
+                <option value="Darwin"></option>
+                <option value="Hobart"></option>
+                <option value="Melbourne"></option>
+                <option value="Perth"></option>
+                <option value="Sydney"></option>
+              </datalist>
+            </div>
+            <div class="col">
+              <button
+                type="submit"
+                id="search-button"
+                class="btn btn-secondary search-button"
+              >
+                <img
+                  src="images/other/magnifyglass.png"
+                  alt="search icon"
+                  width="20px"
+                />
+                Search
+              </button>
+            </div>
+            <div class="col">
+              <button
+                type="button"
+                id="current-location-button"
+                class="btn btn-secondary current-location-button"
+              >
+                <img
+                  src="images/other/location.png"
+                  alt="search icon"
+                  width="20px"
+                />
+                Current
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <br />
+
+      <!-- Today's Weather Summary -->
+      <div class="row row-cols-2 justify-content-center">
+        <div class="col-7">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <h2>
+                Currently in <br />
+                <span class="city" id="display-city">Happyland</span>
+              </h2>
+              <div class="row gx-0 justify-content-center">
+                <div class="col-5 align-self-center">
+                  <h2 id="current-temp" class="temp">🤍</h2>
+                </div>
+                <div class="col-3 align-self-top temp-unit-selector">
+                  <button class="celsius-button celsius-button-selected">
+                    ℃
+                  </button>
+                  |
+                  <button class="fahrenheit-button">℉</button>
+                </div>
+              </div>
+              <div class="row gx-0 justify-content-center">
+                <div class="col-4 gy-3 align-self-center">
+                  <img
+                    src="images/Park1.svg"
+                    alt="weather picture"
+                    width="215px"
+                  />
+                </div>
+                <div class="col-4 align-self-top">
+                  <img
+                    src="images/overcast.png"
+                    alt="weather icon"
+                    width="60px"
+                  />
+                  <h4 id="weather-description"></h4>
+                </div>
+              </div>
+              <br />
+              <p>
+                Today's high: <span id="today-high" class="temp"></span>
+                <span class="temp-units">℃</span>
+                <br />
+                Today's low: <span id="today-low" class="temp"></span>
+                <span class="temp-units">℃</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Day, Date & Time -->
+        <div class="col-5">
+          <div class="card text-center">
+            <div class="card-body">
+              <p id="current-day">Tuesday</p>
+              <p id="date-time">
+                <span id="current-date">5 </span>
+                <span id="current-month">November </span>
+                <span id="current-year">2021</span>
+                <br />
+                <span id="current-hour">10</span>
+                :
+                <span id="current-minutes">00</span>
+                <span id="current-AmPm"> am</span>
+              </p>
+            </div>
+          </div>
+          <br />
+
+          <!-- Today's Weather Stats -->
+          <div class="card text-center">
+            <div class="card-body">
+              <h3>More about today:</h3>
+              <ul class="stats-list">
+                <li class="stats-list-item">
+                  Precipitation: <span id="today-precipitation"></span> mm
+                </li>
+                <li class="stats-list-item">
+                  Humidity: <span id="today-humidity"></span>%
+                </li>
+                <li class="stats-list-item">
+                  Wind Speed: <span id="today-windspeed"></span> km/hr
+                </li>
+                <li class="stats-list-item">
+                  Wind Direction: <span id="today-wind-direction"></span>°
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+
+      <!-- The Next 5 Days Weather Forecast -->
+      <div class="row row-cols-5 gx-1 justify-content-evenly">
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5>Wed</h5>
+              <img src="images/sunny.png" alt="weather icon" width="60px" />
+              <p>11° / <strong> 19°</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5>Thu</h5>
+              <img src="images/cloudy.png" alt="weather icon" width="60px" />
+              <p>13° / <strong> 21°</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5>Fri</h5>
+              <img
+                src="images/rain-with-sun.png"
+                alt="weather icon"
+                width="60px"
+              />
+              <p>15° / <strong> 23°</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5>Sat</h5>
+              <img src="images/showers.png" alt="weather icon" width="60px" />
+              <p>15° / <strong> 25°</strong></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5>Sun</h5>
+              <img
+                src="images/thunder-storm.png"
+                alt="weather icon"
+                width="60px"
+              />
+              <p>18° / <strong> 27°</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+
+      <!-- Footer -->
+      <div class="footer">
+        Coded by <span class="coder">Annelize Grobbelaar</span> |
+        <a
+          href="https://www.linkedin.com/in/annelize-grobbelaar-1ba524151/"
+          title="LinkedIn"
+          target="_blank"
+          >LinkedIn</a
+        >
+        <br />
+        Icons made by
+        <a href="https://www.freepik.com" title="Freepik" target="_blank"
+          >Freepik</a
+        >
+        from
+        <a href="https://www.flaticon.com/" title="Flaticon" target="_blank"
+          >www.flaticon.com</a
+        >
+      </div>
+    </div>
+    <script src="src/scriptW5.js"></script>
+  </body>
+</html>
