@@ -196,3 +196,6 @@ let fahrenheitButton = document.querySelector(".fahrenheit-button");
 
 celsiusButton.addEventListener("click", updateToCelsius);
 fahrenheitButton.addEventListener("click", updateToFahrenheit);
+
+// Access set city weather upon loading page
+accessCityWeather("Adelaide");
