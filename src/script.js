@@ -40,20 +40,13 @@ let year = now.getFullYear();
 let hours = addZero(now.getHours());
 let minutes = addZero(now.getMinutes());
 
-let thisDay = document.querySelector("#current-day");
-let thisDate = document.querySelector("#current-date");
-let thisMonth = document.querySelector("#current-month");
-let thisYear = document.querySelector("#current-year");
-let thisHours = document.querySelector("#current-hour");
-let thisMinutes = document.querySelector("#current-minutes");
+document.querySelector("#current-day").innerHTML = days[day];
+document.querySelector("#current-date").innerHTML = date;
+document.querySelector("#current-month").innerHTML = months[month];
+document.querySelector("#current-year").innerHTML = year;
+document.querySelector("#current-hour").innerHTML = hours;
+document.querySelector("#current-minutes").innerHTML = minutes;
 let thisAmPm = document.querySelector("#current-AmPm");
-
-thisDay.innerHTML = days[day];
-thisDate.innerHTML = date;
-thisMonth.innerHTML = months[month];
-thisYear.innerHTML = year;
-thisHours.innerHTML = hours;
-thisMinutes.innerHTML = minutes;
 
 if (hours >= 12) {
   thisAmPm.innerHTML = "PM";
@@ -61,7 +54,7 @@ if (hours >= 12) {
   thisAmPm.innerHTML = "AM";
 }
 
-// Access weather when selecting a city via form input
+// Access weather & forcast for either a selected city or current position
 function selectCity(event) {
   event.preventDefault();
   let citySearchInput = document.querySelector("#search-city-input");
@@ -79,10 +72,6 @@ function accessCityWeather(city) {
   axios.get(forecastApiUrl).then(updateForecastWeather);
 }
 
-let searchCityForm = document.querySelector("#search-city-form");
-searchCityForm.addEventListener("submit", selectCity);
-
-// Access weather when "Current" position button is used
 function accessPosition() {
   navigator.geolocation.getCurrentPosition(accessPositionWeather);
 }
@@ -98,10 +87,6 @@ function accessPositionWeather(position) {
   axios.get(forecastApiUrl).then(updateForecastWeather);
 }
 
-let currentLocation = document.querySelector("#current-location-button");
-currentLocation.addEventListener("click", accessPosition);
-
-// Update weather data for selected city or current position
 function updateCityWeather(response) {
   // console.log(response.data);
   let displayCity = document.querySelector("#display-city");
@@ -119,11 +104,9 @@ function updateCityWeather(response) {
   todayLow.innerHTML = Math.round(response.data.main.temp_min);
 
   if (response.data.rain === null || response.data.rain === undefined) {
-    let todayPrecipitation = document.querySelector("#today-precipitation");
-    todayPrecipitation.innerHTML = "0";
+    document.querySelector("#today-precipitation").innerHTML = "0";
   } else {
-    let todayPrecipitation = document.querySelector("#today-precipitation");
-    todayPrecipitation.innerHTML =
+    document.querySelector("#today-precipitation").innerHTML =
       Math.round(response.data.rain["1h"] * 10) / 10;
   }
 
@@ -140,7 +123,6 @@ function updateForecastWeather(response) {
   // This is a work in procress for next week
 }
 
-// Swap Celsius & Fahrenheit
 function updateToCelsius() {
   let displayTemp = document.querySelectorAll(".temp");
 
@@ -191,11 +173,15 @@ function updateToFahrenheit() {
   }
 }
 
-let celsiusButton = document.querySelector(".celsius-button");
-let fahrenheitButton = document.querySelector(".fahrenheit-button");
+let searchCityForm = document.querySelector("#search-city-form");
+searchCityForm.addEventListener("submit", selectCity);
 
+let currentLocation = document.querySelector("#current-location-button");
+currentLocation.addEventListener("click", accessPosition);
+
+let celsiusButton = document.querySelector(".celsius-button");
 celsiusButton.addEventListener("click", updateToCelsius);
+let fahrenheitButton = document.querySelector(".fahrenheit-button");
 fahrenheitButton.addEventListener("click", updateToFahrenheit);
 
-// Access set city weather upon loading page
 accessCityWeather("Adelaide");
