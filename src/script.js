@@ -96,7 +96,6 @@ function updateCityWeather(response) {
   displayTemp.innerHTML = Math.round(response.data.main.temp);
   let weatherDescription = document.querySelector("#weather-description");
   weatherDescription.innerHTML = response.data.weather[0].description;
-  weatherDescription.innerHTML = weatherDescription.innerHTML.toUpperCase();
 
   let todayHigh = document.querySelector("#today-high");
   todayHigh.innerHTML = Math.round(response.data.main.temp_max);
