@@ -113,6 +113,8 @@ function updateCityWeather(response) {
     document.querySelector("#today-precipitation").innerHTML =
       Math.round(response.data.rain["1h"] * 10) / 10;
   }
+
+  celsiusButton.disabled = true; //Ensure that C button cannot be clicked upon initial loading of page.
 }
 
 function updateForecastWeather(response) {
@@ -121,7 +123,7 @@ function updateForecastWeather(response) {
 }
 
 function updateToCelsius() {
-  let displayTemp = document.querySelectorAll(".temp");
+  let displayTemp = document.querySelectorAll(".temp"); //To select all the different temperatures on app.
 
   for (let i = 0; i < displayTemp.length; i++) {
     displayTemp[i].innerHTML = Math.round(
@@ -129,10 +131,7 @@ function updateToCelsius() {
     );
   }
 
-  let celsiusButton = document.querySelector(".celsius-button");
   celsiusButton.classList.add("celsius-button-selected");
-
-  let fahrenheitButton = document.querySelector(".fahrenheit-button");
   fahrenheitButton.classList.remove("fahrenheit-button-selected");
 
   celsiusButton.disabled = true;
@@ -146,7 +145,7 @@ function updateToCelsius() {
 }
 
 function updateToFahrenheit() {
-  let displayTemp = document.querySelectorAll(".temp");
+  let displayTemp = document.querySelectorAll(".temp"); //To select all the different temperatures on app.
 
   for (let i = 0; i < displayTemp.length; i++) {
     displayTemp[i].innerHTML = Math.round(
@@ -154,10 +153,7 @@ function updateToFahrenheit() {
     );
   }
 
-  let fahrenheitButton = document.querySelector(".fahrenheit-button");
   fahrenheitButton.classList.add("fahrenheit-button-selected");
-
-  let celsiusButton = document.querySelector(".celsius-button");
   celsiusButton.classList.remove("celsius-button-selected");
 
   fahrenheitButton.disabled = true;
