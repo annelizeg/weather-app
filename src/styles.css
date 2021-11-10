@@ -21,6 +21,8 @@ h3 {
 
 h4 {
   font-size: calc(1.2rem + 0.3vw);
+  width: 150px;
+  margin: 0 auto 5px;
 }
 
 a {
@@ -151,4 +153,9 @@ a:hover {
 
 #weather-description {
   text-transform: capitalize;
+}
+
+#app-park-picture {
+  position: relative;
+  left: 60px;
 }
