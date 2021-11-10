@@ -90,17 +90,22 @@ function accessPositionWeather(position) {
 function updateCityWeather(response) {
   // console.log(response.data);
   let displayCity = document.querySelector("#display-city");
-  displayCity.innerHTML = response.data.name;
-
   let displayTemp = document.querySelector("#current-temp");
-  displayTemp.innerHTML = Math.round(response.data.main.temp);
   let weatherDescription = document.querySelector("#weather-description");
-  weatherDescription.innerHTML = response.data.weather[0].description;
-
   let todayHigh = document.querySelector("#today-high");
-  todayHigh.innerHTML = Math.round(response.data.main.temp_max);
   let todayLow = document.querySelector("#today-low");
+  let todayHumidity = document.querySelector("#today-humidity");
+  let todayWindspeed = document.querySelector("#today-windspeed");
+  let todayWindDirection = document.querySelector("#today-wind-direction");
+
+  displayCity.innerHTML = response.data.name;
+  displayTemp.innerHTML = Math.round(response.data.main.temp);
+  weatherDescription.innerHTML = response.data.weather[0].description;
+  todayHigh.innerHTML = Math.round(response.data.main.temp_max);
   todayLow.innerHTML = Math.round(response.data.main.temp_min);
+  todayHumidity.innerHTML = Math.round(response.data.main.humidity);
+  todayWindspeed.innerHTML = Math.round(response.data.wind.speed * 3.6); //includes conversion from m/sec to km/hr
+  todayWindDirection.innerHTML = Math.round(response.data.wind.deg);
 
   if (response.data.rain === null || response.data.rain === undefined) {
     document.querySelector("#today-precipitation").innerHTML = "0";
@@ -108,13 +113,6 @@ function updateCityWeather(response) {
     document.querySelector("#today-precipitation").innerHTML =
       Math.round(response.data.rain["1h"] * 10) / 10;
   }
-
-  let todayHumidity = document.querySelector("#today-humidity");
-  todayHumidity.innerHTML = Math.round(response.data.main.humidity);
-  let todayWindspeed = document.querySelector("#today-windspeed");
-  todayWindspeed.innerHTML = Math.round(response.data.wind.speed * 3.6); //includes conversion from m/sec to km/hr
-  let todayWindDirection = document.querySelector("#today-wind-direction");
-  todayWindDirection.innerHTML = Math.round(response.data.wind.deg);
 }
 
 function updateForecastWeather(response) {
