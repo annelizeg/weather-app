@@ -122,6 +122,27 @@ function updateCityWeather(response) {
 function updateForecastWeather(response) {
   // console.log(response.data);
   // This is a work in procress for next week
+
+  let forecastElement = document.querySelector("#forecast");
+  let forecastdays = ["Wed", "Thur", "Fri", "Sat", "Sun"];
+  let forecastHTML = `<div class="row gx-1 justify-content-evenly">`;
+
+  forecastdays.forEach(function (day) {
+    forecastHTML =
+      forecastHTML +
+      `<div class="col-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5>${day}</h5>
+              <img src="images/sunny.png" alt="weather icon" width="60px" />
+              <p>11° / <strong> 19°</strong></p>
+            </div>
+          </div>
+        </div>`;
+  });
+
+  forecastHTML = forecastHTML + `</div>`;
+  forecastElement.innerHTML = forecastHTML;
 }
 
 function updateToCelsius() {
