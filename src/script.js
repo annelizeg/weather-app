@@ -124,25 +124,39 @@ function updateCityWeather(response) {
   celsiusButton.disabled = true; //Ensure that C button cannot be clicked upon initial loading of page.
 }
 
+// Consider moving this function further upwards
+function formateDay(timestamp) {
+  let date = new Date(timestamp);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[day];
+}
+
 function updateForecastWeather(response) {
-  console.log(response.data);
+  // console.log(response.data.daily[0]);
 
   let forecastElement = document.querySelector("#forecast");
-  let forecastdays = ["Wed", "Thur", "Fri", "Sat", "Sun"];
+  let forecast = response.data.daily;
+  // console.log(forecast);
+
   let forecastHTML = `<div class="row gx-1 justify-content-evenly">`;
 
-  forecastdays.forEach(function (day) {
-    forecastHTML =
-      forecastHTML +
-      `<div class="col-2">
+  forecast.forEach(function (forecastDay, index) {
+    if (index > 0 && index < 6) {
+      forecastHTML =
+        forecastHTML +
+        `<div class="col-2">
           <div class="card text-center">
             <div class="card-body">
-              <h5>${day}</h5>
+              <h5>${formateDay(forecastDay.dt * 1000)}</h5>
               <img src="images/sunny.png" alt="weather icon" width="60px" />
-              <p>11° / <strong> 19°</strong></p>
+              <p>${Math.round(forecastDay.temp.min)}° / <strong> ${Math.round(
+          forecastDay.temp.max
+        )}°</strong></p>
             </div>
           </div>
         </div>`;
+    }
   });
 
   forecastHTML = forecastHTML + `</div>`;
