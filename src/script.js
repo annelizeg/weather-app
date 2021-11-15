@@ -66,10 +66,7 @@ function accessCityWeather(city) {
   let weatherApiKey = "52fbb143d82a4151063455d0b96cd0e1";
   let weatherUnits = "metric";
   let weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&units=${weatherUnits}&appid=${weatherApiKey}`;
-  let forecastApiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${selectedCity}&units=${weatherUnits}&appid=${weatherApiKey}`;
-
   axios.get(weatherApiUrl).then(updateCityWeather);
-  axios.get(forecastApiUrl).then(updateForecastWeather);
 }
 
 function accessPosition() {
@@ -82,13 +79,21 @@ function accessPositionWeather(position) {
   let weatherApiKey = "52fbb143d82a4151063455d0b96cd0e1";
   let weatherUnits = "metric";
   let weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${weatherUnits}&appid=${weatherApiKey}`;
-  let forecastApiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${weatherUnits}&appid=${weatherApiKey}`;
   axios.get(weatherApiUrl).then(updateCityWeather);
+}
+
+function accessForecastWeather(coordinates) {
+  let weatherApiKey = "52fbb143d82a4151063455d0b96cd0e1";
+  let weatherUnits = "metric";
+  let forecastApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=minutely,hourly&units=${weatherUnits}&appid=${weatherApiKey}`;
+
   axios.get(forecastApiUrl).then(updateForecastWeather);
 }
 
 function updateCityWeather(response) {
   // console.log(response.data);
+  accessForecastWeather(response.data.coord);
+
   let displayCity = document.querySelector("#display-city");
   let displayTemp = document.querySelector("#current-temp");
   let weatherDescription = document.querySelector("#weather-description");
@@ -120,8 +125,7 @@ function updateCityWeather(response) {
 }
 
 function updateForecastWeather(response) {
-  // console.log(response.data);
-  // This is a work in procress for next week
+  console.log(response.data);
 
   let forecastElement = document.querySelector("#forecast");
   let forecastdays = ["Wed", "Thur", "Fri", "Sat", "Sun"];
