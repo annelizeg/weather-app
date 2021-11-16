@@ -97,8 +97,6 @@ function updateCityWeather(response) {
   let displayCity = document.querySelector("#display-city");
   let displayTemp = document.querySelector("#current-temp");
   let weatherDescription = document.querySelector("#weather-description");
-  let todayHigh = document.querySelector("#today-high");
-  let todayLow = document.querySelector("#today-low");
   let todayHumidity = document.querySelector("#today-humidity");
   let todayWindspeed = document.querySelector("#today-windspeed");
   let todayWindDirection = document.querySelector("#today-wind-direction");
@@ -106,13 +104,11 @@ function updateCityWeather(response) {
   displayCity.innerHTML = response.data.name;
   displayTemp.innerHTML = Math.round(response.data.main.temp);
   weatherDescription.innerHTML = response.data.weather[0].description;
-  todayHigh.innerHTML = Math.round(response.data.main.temp_max);
-  todayLow.innerHTML = Math.round(response.data.main.temp_min);
   todayHumidity.innerHTML = Math.round(response.data.main.humidity);
   todayWindspeed.innerHTML = Math.round(response.data.wind.speed * 3.6); //includes conversion from m/sec to km/hr
   todayWindDirection.innerHTML = Math.round(response.data.wind.deg);
 
-  updateWeatherIcons(response.data.weather[0].icon, "0"); //Parameter "0" required for index in function
+  updateWeatherIcons(response.data.weather[0].icon, "C"); //Parameter "C" required for current index in function
 
   if (response.data.rain === null || response.data.rain === undefined) {
     document.querySelector("#today-precipitation").innerHTML = "0";
@@ -122,6 +118,14 @@ function updateCityWeather(response) {
   }
 
   celsiusButton.disabled = true; //Ensure that C button cannot be clicked upon initial loading of page.
+}
+
+function updateTodayHighLowTemp(todaysForecast) {
+  let todayHigh = document.querySelector("#today-high");
+  let todayLow = document.querySelector("#today-low");
+
+  todayHigh.innerHTML = Math.round(todaysForecast.temp.max);
+  todayLow.innerHTML = Math.round(todaysForecast.temp.min);
 }
 
 // Consider moving this function further upwards
@@ -141,7 +145,7 @@ function updateForecastWeather(response) {
   let forecastHTML = `<div class="row gx-1 justify-content-evenly">`;
 
   forecast.forEach(function (forecastDay, index) {
-    if (index > 0 && index < 6) {
+    if (index > -1 && index < 6) {
       forecastHTML += `<div class="col-2">
       <div class="card text-center">
       <div class="card-body">
@@ -160,10 +164,12 @@ function updateForecastWeather(response) {
   forecastElement.innerHTML = forecastHTML;
 
   forecast.forEach(function (forecastDay, index) {
-    if (index > 0 && index < 6) {
+    if (index > -1 && index < 6) {
       updateWeatherIcons(forecastDay.weather[0].icon, index);
     }
   });
+
+  updateTodayHighLowTemp(forecast[0]);
 }
 
 function updateToCelsius() {
