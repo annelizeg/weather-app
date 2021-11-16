@@ -112,7 +112,7 @@ function updateCityWeather(response) {
   todayWindspeed.innerHTML = Math.round(response.data.wind.speed * 3.6); //includes conversion from m/sec to km/hr
   todayWindDirection.innerHTML = Math.round(response.data.wind.deg);
 
-  updateWeatherIcons(response.data.weather[0].icon);
+  updateWeatherIcons(response.data.weather[0].icon, "0"); //Parameter "0" required for index in function
 
   if (response.data.rain === null || response.data.rain === undefined) {
     document.querySelector("#today-precipitation").innerHTML = "0";
@@ -133,34 +133,37 @@ function formateDay(timestamp) {
 }
 
 function updateForecastWeather(response) {
-  // console.log(response.data.daily[0]);
+  // console.log(response.data.daily);
 
   let forecastElement = document.querySelector("#forecast");
   let forecast = response.data.daily;
-  // console.log(forecast);
 
   let forecastHTML = `<div class="row gx-1 justify-content-evenly">`;
 
   forecast.forEach(function (forecastDay, index) {
     if (index > 0 && index < 6) {
-      forecastHTML =
-        forecastHTML +
-        `<div class="col-2">
-          <div class="card text-center">
-            <div class="card-body">
-              <h5>${formateDay(forecastDay.dt * 1000)}</h5>
-              <img src="images/sunny.png" alt="weather icon" width="60px" />
-              <p>${Math.round(forecastDay.temp.min)}° / <strong> ${Math.round(
-          forecastDay.temp.max
-        )}°</strong></p>
-            </div>
-          </div>
+      forecastHTML += `<div class="col-2">
+      <div class="card text-center">
+      <div class="card-body">
+      <h5>${formateDay(forecastDay.dt * 1000)}</h5>
+      <img src="" alt="weather icon" width="60px" id="weather-icon${index}"/>
+      <p>${Math.round(forecastDay.temp.min)}° / <strong> ${Math.round(
+        forecastDay.temp.max
+      )}°</strong></p>
+        </div>
+        </div>
         </div>`;
     }
   });
 
-  forecastHTML = forecastHTML + `</div>`;
+  forecastHTML += `</div>`;
   forecastElement.innerHTML = forecastHTML;
+
+  forecast.forEach(function (forecastDay, index) {
+    if (index > 0 && index < 6) {
+      updateWeatherIcons(forecastDay.weather[0].icon, index);
+    }
+  });
 }
 
 function updateToCelsius() {
@@ -207,27 +210,27 @@ function updateToFahrenheit() {
   }
 }
 
-function updateWeatherIcons(iconCode) {
-  let todayWeatherIcon = document.querySelector("#today-weather-icon");
+function updateWeatherIcons(iconCode, index) {
+  let weatherIcon = document.querySelector("#weather-icon" + index);
 
   if (iconCode === "01d" || iconCode === "01n") {
-    todayWeatherIcon.setAttribute("src", `images/sunny.png`); // Clear Sky
+    weatherIcon.setAttribute("src", `images/sunny.png`); // Clear Sky
   } else if (iconCode === "02d" || iconCode === "02n") {
-    todayWeatherIcon.setAttribute("src", `images/partly-sunny.png`); //Few Clouds
+    weatherIcon.setAttribute("src", `images/partly-sunny.png`); //Few Clouds
   } else if (iconCode === "03d" || iconCode === "03n") {
-    todayWeatherIcon.setAttribute("src", `images/cloudy.png`); //Scattered Clouds
+    weatherIcon.setAttribute("src", `images/cloudy.png`); //Scattered Clouds
   } else if (iconCode === "04d" || iconCode === "04n") {
-    todayWeatherIcon.setAttribute("src", `images/overcast.png`); //Broken Clouds
+    weatherIcon.setAttribute("src", `images/overcast.png`); //Broken Clouds
   } else if (iconCode === "09d" || iconCode === "09n") {
-    todayWeatherIcon.setAttribute("src", `images/rain-with-sun.png`); //Shower Rain or drizzle
+    weatherIcon.setAttribute("src", `images/rain-with-sun.png`); //Shower Rain or drizzle
   } else if (iconCode === "10d" || iconCode === "10n") {
-    todayWeatherIcon.setAttribute("src", `images/heavy-rain.png`); //Rain
+    weatherIcon.setAttribute("src", `images/heavy-rain.png`); //Rain
   } else if (iconCode === "11d" || iconCode === "11n") {
-    todayWeatherIcon.setAttribute("src", `images/thunderstorm.png`); //Thunderstorm
+    weatherIcon.setAttribute("src", `images/thunderstorm.png`); //Thunderstorm
   } else if (iconCode === "13d" || iconCode === "13n") {
-    todayWeatherIcon.setAttribute("src", `images/snowy.png`); //Snow
+    weatherIcon.setAttribute("src", `images/snowy.png`); //Snow
   } else if (iconCode === "50d" || iconCode === "50n") {
-    todayWeatherIcon.setAttribute("src", `images/fog.png`); //Mist or fog
+    weatherIcon.setAttribute("src", `images/fog.png`); //Mist or fog
   }
 }
 
