@@ -117,10 +117,14 @@ a:hover {
   font-size: 18px;
   font-weight: 500;
   margin-block-start: 13px;
-  line-height: 2.7;
+  line-height: 2.5;
   border: 3px solid #f9ce00;
   border-radius: 20px;
   box-shadow: 2px 2px 2px 2px #09194f;
+}
+
+.precipitation-block {
+  line-height: 1.5;
 }
 
 .footer {
@@ -158,4 +162,19 @@ a:hover {
 #app-park-picture {
   position: relative;
   left: 60px;
+}
+
+#today-precip-type {
+  font-size: 16px;
+  opacity: 0.95;
+}
+
+#today-precip-volume,
+#today-precip-chance {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.precip-volume-padding {
+  padding-left: 20px;
 }

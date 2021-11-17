@@ -164,7 +164,16 @@
               <h3>More about today:</h3>
               <ul class="stats-list">
                 <li class="stats-list-item">
-                  Precipitation: <span id="today-precipitation"></span> mm
+                  <div class="precipitation-block">
+                    Precipitation: <span id="today-precip-type"></span>
+                    <div>
+                      <span id="today-precip-chance"></span>
+                      <span
+                        id="today-precip-volume"
+                        class="precip-volume-padding"
+                      ></span>
+                    </div>
+                  </div>
                 </li>
                 <li class="stats-list-item">
                   Humidity: <span id="today-humidity"></span>%

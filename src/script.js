@@ -110,14 +110,29 @@ function updateCityWeather(response) {
 
   updateWeatherIcons(response.data.weather[0].icon, "C"); //Parameter "C" required for current index in function
 
-  if (response.data.rain === null || response.data.rain === undefined) {
-    document.querySelector("#today-precipitation").innerHTML = "0";
-  } else {
-    document.querySelector("#today-precipitation").innerHTML =
-      Math.round(response.data.rain["1h"] * 10) / 10;
-  }
-
   celsiusButton.disabled = true; //Ensure that C button cannot be clicked upon initial loading of page.
+}
+
+function updateTodayPrecipitation(todaysForecast) {
+  // console.log(todaysForecast);
+  document.querySelector("#today-precip-chance").innerHTML =
+    todaysForecast.pop * 100 + "% chance ";
+
+  if (todaysForecast.rain > 0) {
+    document.querySelector("#today-precip-type").innerHTML = "Rain 🌧";
+    document.querySelector("#today-precip-volume").innerHTML =
+      Math.round(todaysForecast.rain * 10) / 10 + " mm";
+  } else if (todaysForecast.snow > 0) {
+    document.querySelector("#today-precip-type").innerHTML = "Snow ❄";
+    document.querySelector("#today-precip-volume").innerHTML =
+      Math.round(todaysForecast.snow * 10) / 10 + " mm";
+  } else {
+    document.querySelector("#today-precip-type").innerHTML = "";
+    document.querySelector("#today-precip-volume").innerHTML = "";
+    document
+      .querySelector("#today-precip-volume")
+      .classList.remove("precip-volume-padding");
+  }
 }
 
 function updateTodayHighLowTemp(todaysForecast) {
@@ -170,6 +185,7 @@ function updateForecastWeather(response) {
   });
 
   updateTodayHighLowTemp(forecast[0]);
+  updateTodayPrecipitation(forecast[0]);
 }
 
 function updateToCelsius() {
