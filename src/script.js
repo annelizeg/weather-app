@@ -190,9 +190,12 @@ function updateForecastWeather(response) {
       <div class="card-body">
       <h5>${formateDay(forecastDay.dt * 1000)}</h5>
       <img src="" alt="weather icon" width="60px" id="weather-icon${index}"/>
-      <p>${Math.round(forecastDay.temp.min)}° / <strong> ${Math.round(
-        forecastDay.temp.max
-      )}°</strong></p>
+      <p>
+      <span class="temp">${Math.round(forecastDay.temp.min)}</span>° / 
+      <strong>
+      <span class="temp">${Math.round(forecastDay.temp.max)}</span>°
+      </strong>
+      </p>
         </div>
         </div>
         </div>`;
