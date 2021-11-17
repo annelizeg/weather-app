@@ -99,14 +99,12 @@ function updateCityWeather(response) {
   let weatherDescription = document.querySelector("#weather-description");
   let todayHumidity = document.querySelector("#today-humidity");
   let todayWindspeed = document.querySelector("#today-windspeed");
-  let todayWindDirection = document.querySelector("#today-wind-direction");
 
   displayCity.innerHTML = response.data.name;
   displayTemp.innerHTML = Math.round(response.data.main.temp);
   weatherDescription.innerHTML = response.data.weather[0].description;
   todayHumidity.innerHTML = Math.round(response.data.main.humidity);
   todayWindspeed.innerHTML = Math.round(response.data.wind.speed * 3.6); //includes conversion from m/sec to km/hr
-  todayWindDirection.innerHTML = Math.round(response.data.wind.deg);
 
   updateWeatherIcons(response.data.weather[0].icon, "C"); //Parameter "C" required for current index in function
 
@@ -114,9 +112,11 @@ function updateCityWeather(response) {
 }
 
 function updateTodayPrecipitation(todaysForecast) {
-  // console.log(todaysForecast);
   document.querySelector("#today-precip-chance").innerHTML =
     todaysForecast.pop * 100 + "% chance ";
+  document
+    .querySelector("#today-precip-volume")
+    .classList.add("precip-volume-padding");
 
   if (todaysForecast.rain > 0) {
     document.querySelector("#today-precip-type").innerHTML = "Rain 🌧";
@@ -132,6 +132,30 @@ function updateTodayPrecipitation(todaysForecast) {
     document
       .querySelector("#today-precip-volume")
       .classList.remove("precip-volume-padding");
+  }
+}
+
+function updateTodayUVindex(todaysForecast) {
+  // console.log(todaysForecast);
+  let todayUVindexElement = document.querySelector("#today-UV-index");
+  let todayUVlevelElement = document.querySelector("#today-UV-level");
+  let todayUVindex = Math.round(todaysForecast.uvi * 10) / 10;
+
+  if (todayUVindex < 3) {
+    todayUVindexElement.innerHTML = todayUVindex;
+    todayUVlevelElement.innerHTML = "(low)";
+  } else if (todayUVindex === 3 || todayUVindex < 6) {
+    todayUVindexElement.innerHTML = todayUVindex;
+    todayUVlevelElement.innerHTML = "(moderate)";
+  } else if (todayUVindex === 6 || todayUVindex < 8) {
+    todayUVindexElement.innerHTML = todayUVindex;
+    todayUVlevelElement.innerHTML = "(high)";
+  } else if (todayUVindex === 8 || todayUVindex < 11) {
+    todayUVindexElement.innerHTML = todayUVindex;
+    todayUVlevelElement.innerHTML = "(very high)";
+  } else {
+    todayUVindexElement.innerHTML = todayUVindex;
+    todayUVlevelElement.innerHTML = "(extreme)";
   }
 }
 
@@ -186,6 +210,7 @@ function updateForecastWeather(response) {
 
   updateTodayHighLowTemp(forecast[0]);
   updateTodayPrecipitation(forecast[0]);
+  updateTodayUVindex(forecast[0]);
 }
 
 function updateToCelsius() {

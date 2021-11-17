@@ -117,7 +117,7 @@ a:hover {
   font-size: 18px;
   font-weight: 500;
   margin-block-start: 13px;
-  line-height: 2.5;
+  line-height: 2.8;
   border: 3px solid #f9ce00;
   border-radius: 20px;
   box-shadow: 2px 2px 2px 2px #09194f;
@@ -164,7 +164,8 @@ a:hover {
   left: 60px;
 }
 
-#today-precip-type {
+#today-precip-type,
+#today-UV-level {
   font-size: 16px;
   opacity: 0.95;
 }
