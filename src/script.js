@@ -91,6 +91,7 @@ function accessForecastWeather(coordinates) {
 
 function updateCityWeather(response) {
   accessForecastWeather(response.data.coord);
+  updateToCelsius();
 
   let displayCity = document.querySelector("#display-city");
   let displayTemp = document.querySelector("#current-temp");
@@ -163,7 +164,7 @@ function updateTodayHighLowTemp(todaysForecast) {
 
 function updateTodayPrecipitation(todaysForecast) {
   document.querySelector("#today-precip-chance").innerHTML =
-    todaysForecast.pop * 100 + "% chance ";
+    Math.round(todaysForecast.pop * 100) + "% chance ";
   document
     .querySelector("#today-precip-volume")
     .classList.add("precip-volume-padding");
