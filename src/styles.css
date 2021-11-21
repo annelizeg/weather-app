@@ -23,6 +23,7 @@ h4 {
   font-size: calc(1.2rem + 0.3vw);
   width: 150px;
   margin: 0 auto 5px;
+  text-transform: capitalize;
 }
 
 a {
@@ -116,8 +117,8 @@ a:hover {
 .stats-list-item {
   font-size: 18px;
   font-weight: 500;
-  margin-block-start: 13px;
   line-height: 2.8;
+  margin-block-start: 13px;
   border: 3px solid #f9ce00;
   border-radius: 20px;
   box-shadow: 2px 2px 2px 2px #09194f;
@@ -127,10 +128,14 @@ a:hover {
   line-height: 1.5;
 }
 
+.precip-volume-padding {
+  padding-left: 20px;
+}
+
 .footer {
+  color: #fff;
   font-family: "PT Mono", monospace;
   font-size: 13px;
-  color: #fff;
   text-align: center;
 }
 
@@ -150,13 +155,10 @@ a:hover {
   font-size: 1.5em;
   font-weight: 800;
 }
+
 #date-time {
   font-size: 1.2em;
   font-weight: 700;
-}
-
-#weather-description {
-  text-transform: capitalize;
 }
 
 #app-park-picture {
@@ -174,8 +176,4 @@ a:hover {
 #today-precip-chance {
   font-size: 16px;
   line-height: 1.5;
-}
-
-.precip-volume-padding {
-  padding-left: 20px;
 }

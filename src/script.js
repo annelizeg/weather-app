@@ -86,12 +86,10 @@ function accessForecastWeather(coordinates) {
   let weatherApiKey = "52fbb143d82a4151063455d0b96cd0e1";
   let weatherUnits = "metric";
   let forecastApiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=minutely,hourly&units=${weatherUnits}&appid=${weatherApiKey}`;
-
   axios.get(forecastApiUrl).then(updateForecastWeather);
 }
 
 function updateCityWeather(response) {
-  // console.log(response.data);
   accessForecastWeather(response.data.coord);
 
   let displayCity = document.querySelector("#display-city");
@@ -111,76 +109,9 @@ function updateCityWeather(response) {
   celsiusButton.disabled = true; //Ensure that C button cannot be clicked upon initial loading of page.
 }
 
-function updateTodayPrecipitation(todaysForecast) {
-  document.querySelector("#today-precip-chance").innerHTML =
-    todaysForecast.pop * 100 + "% chance ";
-  document
-    .querySelector("#today-precip-volume")
-    .classList.add("precip-volume-padding");
-
-  if (todaysForecast.rain > 0) {
-    document.querySelector("#today-precip-type").innerHTML = "Rain 🌧";
-    document.querySelector("#today-precip-volume").innerHTML =
-      Math.round(todaysForecast.rain * 10) / 10 + " mm";
-  } else if (todaysForecast.snow > 0) {
-    document.querySelector("#today-precip-type").innerHTML = "Snow ❄";
-    document.querySelector("#today-precip-volume").innerHTML =
-      Math.round(todaysForecast.snow * 10) / 10 + " mm";
-  } else {
-    document.querySelector("#today-precip-type").innerHTML = "";
-    document.querySelector("#today-precip-volume").innerHTML = "";
-    document
-      .querySelector("#today-precip-volume")
-      .classList.remove("precip-volume-padding");
-  }
-}
-
-function updateTodayUVindex(todaysForecast) {
-  // console.log(todaysForecast);
-  let todayUVindexElement = document.querySelector("#today-UV-index");
-  let todayUVlevelElement = document.querySelector("#today-UV-level");
-  let todayUVindex = Math.round(todaysForecast.uvi * 10) / 10;
-
-  if (todayUVindex < 3) {
-    todayUVindexElement.innerHTML = todayUVindex;
-    todayUVlevelElement.innerHTML = "(low)";
-  } else if (todayUVindex === 3 || todayUVindex < 6) {
-    todayUVindexElement.innerHTML = todayUVindex;
-    todayUVlevelElement.innerHTML = "(moderate)";
-  } else if (todayUVindex === 6 || todayUVindex < 8) {
-    todayUVindexElement.innerHTML = todayUVindex;
-    todayUVlevelElement.innerHTML = "(high)";
-  } else if (todayUVindex === 8 || todayUVindex < 11) {
-    todayUVindexElement.innerHTML = todayUVindex;
-    todayUVlevelElement.innerHTML = "(very high)";
-  } else {
-    todayUVindexElement.innerHTML = todayUVindex;
-    todayUVlevelElement.innerHTML = "(extreme)";
-  }
-}
-
-function updateTodayHighLowTemp(todaysForecast) {
-  let todayHigh = document.querySelector("#today-high");
-  let todayLow = document.querySelector("#today-low");
-
-  todayHigh.innerHTML = Math.round(todaysForecast.temp.max);
-  todayLow.innerHTML = Math.round(todaysForecast.temp.min);
-}
-
-// Consider moving this function further upwards
-function formateDay(timestamp) {
-  let date = new Date(timestamp);
-  let day = date.getDay();
-  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  return days[day];
-}
-
 function updateForecastWeather(response) {
-  // console.log(response.data.daily);
-
   let forecastElement = document.querySelector("#forecast");
   let forecast = response.data.daily;
-
   let forecastHTML = `<div class="row gx-1 justify-content-evenly">`;
 
   forecast.forEach(function (forecastDay, index) {
@@ -216,8 +147,66 @@ function updateForecastWeather(response) {
   updateTodayUVindex(forecast[0]);
 }
 
+function formateDay(timestamp) {
+  let date = new Date(timestamp);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[day];
+}
+
+function updateTodayHighLowTemp(todaysForecast) {
+  let todayHigh = document.querySelector("#today-high");
+  let todayLow = document.querySelector("#today-low");
+  todayHigh.innerHTML = Math.round(todaysForecast.temp.max);
+  todayLow.innerHTML = Math.round(todaysForecast.temp.min);
+}
+
+function updateTodayPrecipitation(todaysForecast) {
+  document.querySelector("#today-precip-chance").innerHTML =
+    todaysForecast.pop * 100 + "% chance ";
+  document
+    .querySelector("#today-precip-volume")
+    .classList.add("precip-volume-padding");
+
+  if (todaysForecast.rain > 0) {
+    document.querySelector("#today-precip-type").innerHTML = "Rain 🌧";
+    document.querySelector("#today-precip-volume").innerHTML =
+      Math.round(todaysForecast.rain * 10) / 10 + " mm";
+  } else if (todaysForecast.snow > 0) {
+    document.querySelector("#today-precip-type").innerHTML = "Snow ❄";
+    document.querySelector("#today-precip-volume").innerHTML =
+      Math.round(todaysForecast.snow * 10) / 10 + " mm";
+  } else {
+    document.querySelector("#today-precip-type").innerHTML = "";
+    document.querySelector("#today-precip-volume").innerHTML = "";
+    document
+      .querySelector("#today-precip-volume")
+      .classList.remove("precip-volume-padding");
+  }
+}
+
+function updateTodayUVindex(todaysForecast) {
+  let todayUVindexElement = document.querySelector("#today-UV-index");
+  let todayUVlevelElement = document.querySelector("#today-UV-level");
+  let todayUVindex = Math.round(todaysForecast.uvi * 10) / 10;
+
+  todayUVindexElement.innerHTML = todayUVindex;
+  if (todayUVindex < 3) {
+    todayUVlevelElement.innerHTML = "(low)";
+  } else if (todayUVindex === 3 || todayUVindex < 6) {
+    todayUVlevelElement.innerHTML = "(moderate)";
+  } else if (todayUVindex === 6 || todayUVindex < 8) {
+    todayUVlevelElement.innerHTML = "(high)";
+  } else if (todayUVindex === 8 || todayUVindex < 11) {
+    todayUVlevelElement.innerHTML = "(very high)";
+  } else {
+    todayUVlevelElement.innerHTML = "(extreme)";
+  }
+}
+
 function updateToCelsius() {
   let displayTemp = document.querySelectorAll(".temp"); //To select all the different temperatures on app.
+  let todayTempUnits = document.querySelectorAll(".temp-units");
 
   for (let i = 0; i < displayTemp.length; i++) {
     displayTemp[i].innerHTML = Math.round(
@@ -225,21 +214,19 @@ function updateToCelsius() {
     );
   }
 
-  celsiusButton.classList.add("celsius-button-selected");
-  fahrenheitButton.classList.remove("fahrenheit-button-selected");
-
-  celsiusButton.disabled = true;
-  fahrenheitButton.disabled = false;
-
-  let todayTempUnits = document.querySelectorAll(".temp-units");
-
   for (let i = 0; i < todayTempUnits.length; i++) {
     todayTempUnits[i].innerHTML = "℃";
   }
+
+  celsiusButton.classList.add("celsius-button-selected");
+  fahrenheitButton.classList.remove("fahrenheit-button-selected");
+  celsiusButton.disabled = true;
+  fahrenheitButton.disabled = false;
 }
 
 function updateToFahrenheit() {
   let displayTemp = document.querySelectorAll(".temp"); //To select all the different temperatures on app.
+  let todayTempUnits = document.querySelectorAll(".temp-units");
 
   for (let i = 0; i < displayTemp.length; i++) {
     displayTemp[i].innerHTML = Math.round(
@@ -247,22 +234,18 @@ function updateToFahrenheit() {
     );
   }
 
-  fahrenheitButton.classList.add("fahrenheit-button-selected");
-  celsiusButton.classList.remove("celsius-button-selected");
-
-  fahrenheitButton.disabled = true;
-  celsiusButton.disabled = false;
-
-  let todayTempUnits = document.querySelectorAll(".temp-units");
-
   for (let i = 0; i < todayTempUnits.length; i++) {
     todayTempUnits[i].innerHTML = "℉";
   }
+
+  fahrenheitButton.classList.add("fahrenheit-button-selected");
+  celsiusButton.classList.remove("celsius-button-selected");
+  fahrenheitButton.disabled = true;
+  celsiusButton.disabled = false;
 }
 
 function updateWeatherIcons(iconCode, index) {
   let weatherIcon = document.querySelector("#weather-icon" + index);
-
   if (iconCode === "01d" || iconCode === "01n") {
     weatherIcon.setAttribute("src", `images/sunny.png`); // Clear Sky
   } else if (iconCode === "02d" || iconCode === "02n") {
@@ -280,7 +263,7 @@ function updateWeatherIcons(iconCode, index) {
   } else if (iconCode === "13d" || iconCode === "13n") {
     weatherIcon.setAttribute("src", `images/snowy.png`); //Snow
   } else if (iconCode === "50d" || iconCode === "50n") {
-    weatherIcon.setAttribute("src", `images/fog.png`); //Mist or fog
+    weatherIcon.setAttribute("src", `images/fog.png`); //Mist or fog or haze
   }
 }
 
